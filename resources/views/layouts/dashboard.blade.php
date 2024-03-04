@@ -40,7 +40,7 @@
         <div class="items-center block w-auto max-h-screen overflow-auto h-sidenav grow basis-full">
             <ul class="flex flex-col pl-0 mb-0">
             <li class="mt-0.5 w-full">
-                <a class="py-2.7 shadow-soft-xl text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg bg-white px-4 font-semibold text-slate-700 transition-colors" href="../pages/dashboard.html">
+                <a class="py-2.7 shadow-soft-xl text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg bg-white px-4 font-semibold text-slate-700 transition-colors" href="{{ route('dashboard.index')}}">
                 <div class="bg-gradient-to-tl from-purple-700 to-pink-500 shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center xl:p-2.5">
                     <svg width="12px" height="12px" viewBox="0 0 45 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <title>shop</title>
@@ -67,7 +67,7 @@
             </li>
 
             <li class="mt-0.5 w-full">
-                <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors" href="../pages/tables.html">
+                <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors" href="{{route('dashboard.categories')}}">
                 <div class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center xl:p-2.5">
                     <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <title>office</title>
@@ -382,6 +382,41 @@
 
         @yield('content')
 
+        {{-- footer --}}
+            <footer class="pt-4">
+                <div class="w-full px-6 mx-auto">
+                <div class="flex flex-wrap items-center -mx-3 lg:justify-between">
+                    <div class="w-full max-w-full px-3 mt-0 mb-6 shrink-0 lg:mb-0 lg:w-1/2 lg:flex-none">
+                    <div class="text-sm leading-normal text-center text-slate-500 lg:text-left">
+                        ©
+                        <script>
+                        document.write(new Date().getFullYear() + ",");
+                        </script>
+                        made with <i class="fa fa-heart"></i> by
+                        <a href="https://www.creative-tim.com" class="font-semibold text-slate-700" target="_blank">Creative Tim</a>
+                        for a better web.
+                    </div>
+                    </div>
+                    <div class="w-full max-w-full px-3 mt-0 shrink-0 lg:w-1/2 lg:flex-none">
+                    <ul class="flex flex-wrap justify-center pl-0 mb-0 list-none lg:justify-end">
+                        <li class="nav-item">
+                        <a href="https://www.creative-tim.com" class="block px-4 pt-0 pb-1 text-sm font-normal transition-colors ease-soft-in-out text-slate-500" target="_blank">Creative Tim</a>
+                        </li>
+                        <li class="nav-item">
+                        <a href="https://www.creative-tim.com/presentation" class="block px-4 pt-0 pb-1 text-sm font-normal transition-colors ease-soft-in-out text-slate-500" target="_blank">About Us</a>
+                        </li>
+                        <li class="nav-item">
+                        <a href="https://creative-tim.com/blog" class="block px-4 pt-0 pb-1 text-sm font-normal transition-colors ease-soft-in-out text-slate-500" target="_blank">Blog</a>
+                        </li>
+                        <li class="nav-item">
+                        <a href="https://www.creative-tim.com/license" class="block px-4 pt-0 pb-1 pr-0 text-sm font-normal transition-colors ease-soft-in-out text-slate-500" target="_blank">License</a>
+                        </li>
+                    </ul>
+                    </div>
+                </div>
+                </div>
+            </footer>
+        <!-- end footer -->
     </main>
 
     <div fixed-plugin>
