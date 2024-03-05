@@ -4,72 +4,56 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Collection;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
     public function index()
     {
-        //
+        $categories = Category::paginate(10);
+        return view('dashboard.categories.categories',compact('categories'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function create()
     {
-        //
+        return view('dashboard.categories.add_category');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+   
     public function store(Request $request)
     {
-        //
+        $form=$request->validate([
+            'name'=>'required|string'
+        ]);
+        $category=Category::where('name',$form['name'])->first();
+        if(!$category) Category::create($form);
+        return redirect()->route('dashboard.categories.categories');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
+   
     public function show(Category $category)
     {
-        //
+        
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Category $category)
+    
+    public function edit($id)
     {
-        //
+        $category=Category::find($id);
+        return view('dashboard.categories.edit_category',compact('category'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Category $category)
+    
+    public function update(Request $request,$id)
     {
-        //
+        $form = $request->validate([
+            'name' => 'required|string|unique:categories,name,' . $id,
+        ]);
+        $category=Category::find($id);
+        $category->update($form);
+        return redirect()->route('dashboard.categories.categories');
     }
 
     /**
@@ -78,8 +62,10 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
-        //
+        $category=Category::find($id);
+        $category->delete();
+        return redirect()->route('dashboard.categories.categories');
     }
 }

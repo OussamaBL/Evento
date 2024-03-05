@@ -41,8 +41,11 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-        $user->assignRole('spectator');
+        
 
+        if($request->type=='spectator') $user->assignRole('spectator');
+        else if($request->type=='organizer') $user->assignRole('organizer');
+        
         event(new Registered($user));
 
         Auth::login($user);

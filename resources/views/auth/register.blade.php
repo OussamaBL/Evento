@@ -16,6 +16,13 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
+        <div class="mt-4">
+            <x-input-label for="type" :value="__('type')" />
+            <input type="radio" name="type" value="spectator">Spectator
+            <input type="radio" name="type" value="organizer">Organizer
+            <x-input-error :messages="$errors->get('type')" class="mt-2" />
+        </div>
+
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
