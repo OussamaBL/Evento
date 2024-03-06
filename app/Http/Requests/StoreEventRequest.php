@@ -26,7 +26,6 @@ class StoreEventRequest extends FormRequest
             'description' => 'required|string',
             'acceptance' => 'required|in:auto,manual',
             'nbr_place' => 'required|integer',
-            // 'localisation' => 'required|string',
             'date_event' => 'required|date',
             'category_id' => 'required|exists:categories,id',
             'image' => 'required',
@@ -50,27 +49,15 @@ class StoreEventRequest extends FormRequest
 
             'description.required' => 'The description field is required.',
             'description.string' => 'The description must be a string.',
-
-            // 'status.required' => 'The status field is required.',
-            // 'status.in' => 'The status must be one of: accepted, refused, pending.',
-
+            
             'acceptance.required' => 'The acceptance field is required.',
             'acceptance.in' => 'The acceptance must be either "auto" or "manual".',
 
             'nbr_place.required' => 'The capacity field is required.',
             'nbr_place.integer' => 'The capacity must be an integer.',
 
-            // 'tickets_sold.required' => 'The tickets_sold field is required.',
-            // 'tickets_sold.integer' => 'The tickets_sold must be an integer.',
-
-            // 'localisation.required' => 'The localisation field is required.',
-            // 'localisation.string' => 'The localisation must be a string.',
-
             'date_event.required' => 'The date field is required.',
             'date_event.date' => 'The date must be a valid date.',
-
-            // 'organizer.required' => 'The organizer field is required.',
-            // 'organizer.exists' => 'The selected organizer is invalid.',
 
             'category_id.required' => 'The category field is required.',
             'category_id.exists' => 'The selected category is invalid.',

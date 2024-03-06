@@ -59,7 +59,6 @@ class EventController extends Controller
                     'description' => $request->input('description'),
                     'acceptance' => $request->input('acceptance'),
                     'nbr_place' => $request->input('nbr_place'),
-                    // 'localisation' => $request->input('localisation'),
                     'date_event' => $request->input('date_event'),
                     'category_id' => $request->input('category_id'),
                     'place_dispo' => $request->input('nbr_place'),
@@ -97,31 +96,35 @@ class EventController extends Controller
      * @param  \App\Models\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function edit(Event $event)
+    public function edit($id)
     {
-        //
+        $event=Event::find($id);
+        
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Event $event)
+   
+    public function update(StoreEventRequest $request, $id)
     {
-        //
+        try{
+            if($request->validated()){
+                $userId = $request->user()->id;
+                $event=Event::find($id);
+                $event->update($request->validated());
+
+            }
+            
+        }
+        catch (\Throwable $th) {
+            dd($th->getMessage());
+        }
+        
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Event $event)
+  
+    public function destroy($id)
     {
-        //
+        $event=Event::find($id);
+        $event->delete();
+
     }
 }
