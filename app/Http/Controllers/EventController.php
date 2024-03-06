@@ -21,6 +21,7 @@ class EventController extends Controller
         $events=Event::where('status','accepted')->paginate(10);
         return view('dashboard.events.events_accepted',compact('events'));
     }
+    
     public function refuse_event($id){
         $event=Event::find($id);
         $event->status='refused';
@@ -41,7 +42,7 @@ class EventController extends Controller
     public function create(Request $request)
     {
         $categories = Category::all();
-        return view('organizer.index', ['categories' => $categories]);
+        return view('organizer.add_event', ['categories' => $categories]);
         
     }
 
