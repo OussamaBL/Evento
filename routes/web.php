@@ -28,11 +28,18 @@ Route::middleware('Auth')->group(function () {
 });
 
 Route::middleware('CheckisOrganizer')->group(function () {
+    Route::get('/my_events', [EventController::class, 'index'])->name('event.index');
+    Route::get('/event/details/{event}', [EventController::class, 'details'])->name('event.details');
+    Route::get('/event/filter/{id}', [EventController::class, 'filterByCategory'])->name('event.filterByCategory');
+    Route::get('/event/search/{title}', [EventController::class, 'searchByTitle'])->name('event.searchByTitle');
     Route::get('/event', [EventController::class, 'create'])->name('event.create');
     Route::post('/event', [EventController::class, 'store'])->name('event.store');
+    Route::get('/event/edit/{id}', [EventController::class, 'edit'])->name('event.edit');
+    Route::put('/event/update/{event}', [EventController::class, 'update'])->name('event.update');
+    Route::delete('/event/destroy/{id}', [EventController::class, 'destroy'])->name('event.destroy');
 });
 
-
+Route::get('/events/filter', [EventController::class, 'Categoryfilter'])->name('home.filter');
 
 Route::middleware('CheckisAdmin')->group(function () {
 

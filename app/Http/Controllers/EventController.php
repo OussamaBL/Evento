@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreEventRequest;
+use App\Http\Requests\UpdateEventRequest;
 use App\Models\Category;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
@@ -35,10 +37,75 @@ class EventController extends Controller
         return redirect()->route('dashboard.events.pending');
     }
     
+
     public function index()
     {
-     }
+        $events = Event::where('user_id', Auth::id())
+               ->whereIn('status', ['accepted', 'pending'])
+               ->paginate(10);
+        return view('organizer.events', compact('events'));
+    }
+
+     public function viewEvent($id)
+    {
+        try {
+            $event = Event::where('id', $id) ->where('status', 'accepted')->firstOrFail();
+            return view('event_page', ['event' => $event]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return view('404');
+        }
+    }
+
+     public function Categoryfilter(Request $request)
+    {
+        $categoryToFilter = $request->input('category');
+        return  Event::filterByCategory($categoryToFilter);
+    }
   
+     public function search(Request $request)
+    {
+        $titleToSearch = $request->input('title');
+        $searchResults = $this->searchByTitle($titleToSearch);
+        return $searchResults;
+    }
+
+    public function filterByCategory($categoryId)
+    {
+
+        $events = Event::where('category_id', $categoryId)->where('status','accepted')->get();
+        $eventsWithMedia = $events->map(function ($event) {
+            $mediaUrls = $event->getMedia('images')->map(function ($media) {
+                return $media->getFullUrl();
+            });
+
+            return [
+                'event' => $event,
+                'media' => $mediaUrls,
+            ];
+        });
+
+        return response()->json(['events' => $eventsWithMedia]);
+    }
+
+    public function searchByTitle($title)
+    {
+        if($title!="all") $events = Event::where('title', 'like', "%{$title}%")->where('status','accepted')->get();
+        else $events = Event::where('status','accepted')->get();
+        
+        $eventsWithMedia = $events->map(function ($event) {
+            $mediaUrls = $event->getMedia('images')->map(function ($media) {
+                return $media->getFullUrl();
+            });
+
+            return [
+                'event' => $event,
+                'media' => $mediaUrls,
+            ];
+        });
+
+        return response()->json(['events' => $eventsWithMedia]);
+    }
+    
     public function create(Request $request)
     {
         $categories = Category::all();
@@ -91,27 +158,33 @@ class EventController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
-     */
+   
     public function edit($id)
     {
+        $categories = Category::all();
         $event=Event::find($id);
-        
+        return view('organizer.edit_event',compact('event','categories'));
     }
 
    
-    public function update(StoreEventRequest $request, $id)
+    public function update(UpdateEventRequest $request, $id)
     {
         try{
             if($request->validated()){
                 $userId = $request->user()->id;
                 $event=Event::find($id);
-                $event->update($request->validated());
+                $form = $request->validated();
+                $event->update($form);
 
+                if ($request->hasFile('image') && $request->file('image')->isValid()) {
+                    $event->clearMediaCollection('images');
+                    $event->addMediaFromRequest('image')->toMediaCollection('images');
+                }
+                return redirect()->route('event.index')->with("success", 'Updated Successfully');
+            }
+            
+            else {
+                return redirect()->back()->withInput()->withErrors($request->errors());
             }
             
         }
@@ -126,6 +199,10 @@ class EventController extends Controller
     {
         $event=Event::find($id);
         $event->delete();
+        return redirect()->route('event.index');
 
+    }
+    public function details(Event $event){
+        return view('event_page',compact('event'));
     }
 }

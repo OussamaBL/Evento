@@ -31,18 +31,23 @@
                 <a href="{{route('register')}}" class='px-4 py-2 text-sm rounded-full font-bold text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#007bff] ml-3'>Sign
                   up
                 </a>
-             </div>
+            </div>
           @endauth
           
-
           <ul id="collapseMenu" class='lg:!flex lg:space-x-5 max-lg:space-y-2 max-lg:hidden max-lg:py-4 max-lg:w-full'>
             <li class='max-lg:border-b max-lg:bg-[#007bff] max-lg:py-2 px-3 max-lg:rounded'>
-              <a href='javascript:void(0)'
+              <a href='{{route('index')}}'
                 class='lg:hover:text-[#007bff] text-[#007bff] max-lg:text-white block font-semibold text-[15px]'>Home</a>
             </li>
-            <li class='max-lg:border-b max-lg:py-2 px-3 max-lg:rounded'><a href='javascript:void(0)'
-                class='lg:hover:text-[#007bff] text-gray-500 block font-semibold text-[15px]'>Team</a>
-            </li>
+            @if (Auth::check() && Auth::user()->hasRole('organizer'))
+                <li class='max-lg:border-b max-lg:py-2 px-3 max-lg:rounded'>
+                    <a href='{{ route('event.index') }}' class='lg:hover:text-[#007bff] text-gray-500 block font-semibold text-[15px]'>My events</a>
+                </li>
+                <li class='max-lg:border-b max-lg:py-2 px-3 max-lg:rounded'>
+                  <a href='{{ route('event.create') }}' class='lg:hover:text-[#007bff] text-gray-500 block font-semibold text-[15px]'>Add event</a>
+              </li>
+            @endif
+            
             <li class='max-lg:border-b max-lg:py-2 px-3 max-lg:rounded'><a href='javascript:void(0)'
                 class='lg:hover:text-[#007bff] text-gray-500 block font-semibold text-[15px]'>Feature</a>
             </li>
@@ -57,11 +62,11 @@
             </li>
           </ul>
         </div>
-      </header>
+    </header>
 
-      @yield('content')
+    @yield("content")
       
-      <footer class="bg-gray-900 py-8 px-10 font-[sans-serif]">
+    <footer class="bg-gray-900 py-8 px-10 font-[sans-serif]">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           <div class="lg:flex lg:items-center">
             <a href="javascript:void(0)">
@@ -131,7 +136,8 @@
         <p class='text-gray-300 text-sm mt-8'>© 2023<a href='https://readymadeui.com/' target='_blank'
           class="hover:underline mx-1">ReadymadeUI</a>All Rights Reserved.
         </p>
-      </footer>
+    </footer>
 
-
+    @yield("scripts")
+</body>
 </html>

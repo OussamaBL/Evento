@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreEventRequest extends FormRequest
+class UpdateEventRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -16,6 +17,11 @@ class StoreEventRequest extends FormRequest
         return true;
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, mixed>
+     */
     public function rules()
     {
         return [
@@ -27,11 +33,11 @@ class StoreEventRequest extends FormRequest
             'acceptance' => 'required|in:auto,manual',
             'nbr_place' => 'required|integer',
             'date_event' => 'required|date|after_or_equal:today',
+            
             'category_id' => 'required|exists:categories,id',
-            'image' => 'required|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
-
     public function messages()
     {
         return [
@@ -62,7 +68,7 @@ class StoreEventRequest extends FormRequest
             'category_id.required' => 'The category field is required.',
             'category_id.exists' => 'The selected category is invalid.',
 
-            'image.required' => 'Please upload an image.',
+
             'image.mimes' => 'The image must be of type: jpeg, png, jpg, gif, svg.',
             'image.max' => 'The image must not be larger than 2048 kilobytes.',
         ];

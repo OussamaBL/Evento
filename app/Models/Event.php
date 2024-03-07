@@ -40,5 +40,6 @@ class Event extends Model implements HasMedia
     {
         return $this->hasOne(Media::class)->where('collection_name', 'images');
     }
+    
 
 }
