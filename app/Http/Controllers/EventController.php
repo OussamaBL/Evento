@@ -60,7 +60,7 @@ class EventController extends Controller
      public function Categoryfilter(Request $request)
     {
         $categoryToFilter = $request->input('category');
-        return  Event::filterByCategory($categoryToFilter);
+        return  $this->filterByCategory($categoryToFilter);
     }
   
      public function search(Request $request)

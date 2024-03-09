@@ -47,19 +47,7 @@
                   <a href='{{ route('event.create') }}' class='lg:hover:text-[#007bff] text-gray-500 block font-semibold text-[15px]'>Add event</a>
               </li>
             @endif
-            
-            <li class='max-lg:border-b max-lg:py-2 px-3 max-lg:rounded'><a href='javascript:void(0)'
-                class='lg:hover:text-[#007bff] text-gray-500 block font-semibold text-[15px]'>Feature</a>
-            </li>
-            <li class='max-lg:border-b max-lg:py-2 px-3 max-lg:rounded'><a href='javascript:void(0)'
-                class='lg:hover:text-[#007bff] text-gray-500 block font-semibold text-[15px]'>Blog</a>
-            </li>
-            <li class='max-lg:border-b max-lg:py-2 px-3 max-lg:rounded'><a href='javascript:void(0)'
-                class='lg:hover:text-[#007bff] text-gray-500 block font-semibold text-[15px]'>About</a>
-            </li>
-            <li class='max-lg:border-b max-lg:py-2 px-3 max-lg:rounded'><a href='javascript:void(0)'
-                class='lg:hover:text-[#007bff] text-gray-500 block font-semibold text-[15px]'>Contact</a>
-            </li>
+           
           </ul>
         </div>
     </header>

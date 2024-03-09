@@ -1,3 +1,5 @@
+@extends("layouts.app")
+@section("content")
 <x-guest-layout>
     <form method="POST" action="{{ route('register') }}">
         @csrf
@@ -18,8 +20,8 @@
 
         <div class="mt-4">
             <x-input-label for="type" :value="__('type')" />
-            <input type="radio" name="type" value="spectator">Spectator
-            <input type="radio" name="type" value="organizer">Organizer
+            <input type="radio" name="type" value="spectator">&nbsp Spectator
+            <input type="radio" name="type" value="organizer">&nbsp Organizer
             <x-input-error :messages="$errors->get('type')" class="mt-2" />
         </div>
 
@@ -57,3 +59,4 @@
         </div>
     </form>
 </x-guest-layout>
+@endsection

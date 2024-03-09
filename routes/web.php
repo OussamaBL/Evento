@@ -21,7 +21,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class,'index'])->name('index');
 Route::get('/event_page/{event}', [EventController::class,'details'])->name('event.details');
-
+Route::get('/event/filter/{id}', [EventController::class, 'filterByCategory'])->name('event.filterByCategory');
+Route::get('/event/search/{title}', [EventController::class, 'searchByTitle'])->name('event.searchByTitle');
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -37,8 +38,6 @@ Route::middleware('CheckisOrganizer')->group(function () {
     Route::get('/reservation/accept/{reservation}', [ReservationController::class, 'accept'])->name('reservation.accept');
     Route::get('/reservation/refuse/{reservation}', [ReservationController::class, 'refuse'])->name('reservation.refuse');
 
-    Route::get('/event/filter/{id}', [EventController::class, 'filterByCategory'])->name('event.filterByCategory');
-    Route::get('/event/search/{title}', [EventController::class, 'searchByTitle'])->name('event.searchByTitle');
     Route::get('/event', [EventController::class, 'create'])->name('event.create');
     Route::post('/event', [EventController::class, 'store'])->name('event.store');
     Route::get('/event/edit/{id}', [EventController::class, 'edit'])->name('event.edit');
