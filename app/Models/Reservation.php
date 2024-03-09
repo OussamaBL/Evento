@@ -13,6 +13,7 @@ class Reservation extends Model
         'event_id',
         'date_reservation',
         'ticket',
+        'status',
     ];
     public function event(){
         return $this->belongsTo(Event::class);

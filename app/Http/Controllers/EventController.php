@@ -6,6 +6,7 @@ use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
 use App\Models\Category;
 use App\Models\Event;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -202,7 +203,48 @@ class EventController extends Controller
         return redirect()->route('event.index');
 
     }
-    public function details(Event $event){
-        return view('event_page',compact('event'));
+    public function details(Request $request,Event $event){
+        $access_reservation=true;
+        $res=Reservation::where('user_id',$request->user()->id)->where('event_id',$event->id)->first();
+        if($event->place_dispo<=0 || strtotime($event->date_event) < strtotime('today') || $res || $event->user_id==$request->user()->id || $request->user()->hasRole('admin')) $access_reservation=false;
+        return view('event_page',compact('event','access_reservation'));
+    }
+
+    public function reservation(Request $request,Event $event){
+        $access_reservation=true;
+        $res=Reservation::where('user_id',$request->user()->id)->where('event_id',$event->id)->first();
+        if($event->place_dispo<=0 || strtotime($event->date_event) < strtotime('today') || $res || $event->user_id==$request->user()->id || $request->user()->hasRole('admin')) $access_reservation=false; 
+        if($access_reservation){
+            if($event->price!=0){
+                echo 'payment';
+            }
+            else{
+                if($event->acceptance=='auto'){
+                    $reservation=Reservation::create([
+                        'user_id'=>$request->user()->id,
+                        'event_id'=>$event->id,
+                        'status'=>'accepted', 
+                    ]);
+                    $event->place_dispo--;
+                    $event->save();
+                    // $this->GenerateTicket();
+                    return redirect()->route('event.details')->with("success", 'Reservation Successfully');
+                }
+                else{
+                    $reservation=Reservation::create([
+                        'user_id'=>$request->user()->id,
+                        'event_id'=>$event->id,
+                        'status'=>'pending', 
+                    ]);
+                    return redirect()->route('event.details')->with("success", 'Reservation in pending Successfully');
+                }
+            } 
+        }
+        else{
+            return redirect()->back()->withInput()->withErrors($request->errors());
+        }
+    }
+    public function GenerateTicket(){
+
     }
 }

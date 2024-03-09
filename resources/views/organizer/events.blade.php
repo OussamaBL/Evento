@@ -70,6 +70,17 @@
                 <td class="px-6 py-4 text-sm text-[#333]">
                     {{$event->status}}
                 </td>
+
+                @if ($event->status=="accepted")
+                    <td class="p-2 text-sm leading-normal text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                      <span class="bg-gradient-to-tl from-green-600 to-lime-400 px-2.5 text-xs rounded-1.8 py-2 inline-block whitespace-nowrap text-center align-baseline font-bold uppercase leading-none text-white">Accepted</span>
+                    </td>
+                @else
+                    <td class="p-2 text-sm leading-normal text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                       <span class="bg-gradient-to-tl from-slate-600 to-slate-300 px-2.5 text-xs rounded-1.8 py-2 inline-block whitespace-nowrap text-center align-baseline font-bold uppercase leading-none text-white">Pending</span>
+                    </td>   
+                @endif
+
                 <td class="px-6 py-4 text-sm text-[#333]">
                     {{$event->price}}
                 </td>
@@ -84,12 +95,13 @@
                 </td>
                 <td class="px-6 py-4 text-sm text-[#333]">
                     <a href="{{ route('event.edit',$event->id) }}" class="text-blue-500 hover:text-blue-700 mr-4">Edit</a>
-                    <form action="{{ route('event.destroy',$event->id) }}" method="post">
-                        @csrf
-                        @method('delete')
-                        <button type="submit" onclick="return confirm('Are you sure you want to delete this user?');" class="text-red-500 hover:text-red-700">Delete</button>
-                    </form>
-                   
+                      <form action="{{ route('event.destroy',$event->id) }}" method="post">
+                          @csrf
+                          @method('delete')
+                          <button type="submit" onclick="return confirm('Are you sure you want to delete this user?');" class="text-red-500 hover:text-red-700">Delete</button>
+                      </form>
+                        <a href="{{route('event.approve',$event->id)}}" class="px-6 py-2 rounded-full text-black text-sm tracking-wider font-medium outline-none border-2 border-purple-600 hover:bg-purple-600 hover:text-white transition-all duration-300">Reservations pending</a>
+                        <a href="{{route('event.reservations',$event->id)}}" class="px-6 py-2 rounded-full text-black text-sm tracking-wider font-medium outline-none border-2 border-green-600 hover:bg-green-600 hover:text-white transition-all duration-300">Reservations</a>
                 </td>
             </tr>
         @endforeach
