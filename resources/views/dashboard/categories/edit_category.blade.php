@@ -22,7 +22,7 @@
                             </div>
                             <div class="flex flex-wrap -mx-3 mb-6">
                               <div class="w-full px-3">
-                                <button type="submit" className="mr-3 inline-block px-6 py-3 font-bold text-center bg-gradient-to-tl from-green-600 to-lime-400 uppercase align-middle transition-all rounded-lg cursor-pointer leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs text-white">Update</button>
+                                <button type="submit" class="px-6 py-2.5 rounded-full text-white text-sm tracking-wider font-semibold border-none outline-none bg-green-600 hover:bg-green-700 active:bg-green-600">Update</button>
                               </div>
                             </div>
                         </form>

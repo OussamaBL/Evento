@@ -32,6 +32,12 @@
                 {{$event->place}}
               </p>
               <div class="flex mb-4">
+                <div class="mr-4">
+                    <span class="font-bold text-gray-700 dark:text-gray-300">Date Event:</span>
+                    <span class="text-gray-600 dark:text-gray-300">{{$event->date_event}}</span>
+                </div>
+            </div>
+              <div class="flex mb-4">
                   <div class="mr-4">
                       <span class="font-bold text-gray-700 dark:text-gray-300">Price:</span>
                       <span class="text-gray-600 dark:text-gray-300">${{$event->price}}</span>

@@ -14,7 +14,7 @@
 <body>
     <header class='shadow-md py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px]'>
         <div class='flex flex-wrap items-center justify-between gap-5 relative'>
-          <a href="javascript:void(0)"><img src="https://readymadeui.com/readymadeui.svg" alt="logo" class='w-36' />
+          <a href="javascript:void(0)"><strong style="color: blue;font-size: 25px">Ev<span style="color: black">ento</span></strong>
           </a>
           @auth
             <div class='flex lg:order-1 max-sm:ml-auto'>
@@ -47,6 +47,11 @@
                   <a href='{{ route('event.create') }}' class='lg:hover:text-[#007bff] text-gray-500 block font-semibold text-[15px]'>Add event</a>
               </li>
             @endif
+            @if (Auth::check() && (Auth::user()->hasRole('organizer') || Auth::user()->hasRole('spectator')))
+                <li class='max-lg:border-b max-lg:py-2 px-3 max-lg:rounded'>
+                    <a href='{{ route('my_reservation') }}' class='lg:hover:text-[#007bff] text-gray-500 block font-semibold text-[15px]'>My Reservations</a>
+                </li>
+            @endif
            
           </ul>
         </div>
@@ -58,7 +63,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           <div class="lg:flex lg:items-center">
             <a href="javascript:void(0)">
-              <img src="https://readymadeui.com/readymadeui-light.svg" alt="logo" class="w-48" />
+              <strong style="color: blue;font-size: 25px">Ev<span style="color: white">ento</span></strong>
             </a>
           </div>
           <div class="lg:flex lg:items-center">
@@ -121,8 +126,8 @@
             </ul>
           </div>
         </div>
-        <p class='text-gray-300 text-sm mt-8'>© 2023<a href='https://readymadeui.com/' target='_blank'
-          class="hover:underline mx-1">ReadymadeUI</a>All Rights Reserved.
+        <p class='text-gray-300 text-sm mt-8'>© 2024<a href='https://readymadeui.com/' target='_blank'
+          class="hover:underline mx-1">Youcode</a>All Rights Reserved.
         </p>
     </footer>
 

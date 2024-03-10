@@ -9,6 +9,7 @@ use App\Models\Event;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
 {
@@ -216,7 +217,53 @@ class EventController extends Controller
         if($event->place_dispo<=0 || strtotime($event->date_event) < strtotime('today') || $res || $event->user_id==$request->user()->id || $request->user()->hasRole('admin')) $access_reservation=false; 
         if($access_reservation){
             if($event->price!=0){
-                echo 'payment';
+                $user = $request->user()->id;
+                $reservation_identity = time() . '_' . $user;
+
+                DB::beginTransaction();
+
+                try {
+                    $reservation = reservation::create([
+                        'user_id' => $user,
+                        'event_id' => $event->id,
+                        'status' => 'pending',
+                        'reservation_identity' => $reservation_identity,
+                    ]);
+
+                    // stripe here 
+                    \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+                    $lineItems = [];
+                    $lineItems[] = [
+                        'price_data' => [
+                            'currency' => 'USD',
+                            'product_data' => [
+                                'name' => "Test Payment",
+                            ],
+                            'unit_amount' => $event->price,
+                        ],
+                        'quantity' => 1,
+                    ];
+
+                    $session = \Stripe\Checkout\Session::create([
+                        'line_items' => $lineItems,
+                        'mode' => 'payment',
+                        'success_url' => route('sucess.payment', [], true) . "?session_id={CHECKOUT_SESSION_ID}",
+                        // 'cancel_url' => route('checkout.cancel', [], true),
+                    ]);
+
+                     session()->put('eventId', $event->id);
+
+                    session()->put('reservation_identity', $reservation_identity);
+                    DB::commit();
+
+                    return redirect($session->url);
+                } catch (\Throwable $th) {
+                    DB::rollback();
+
+                    $errorMessage = $th->getMessage();
+
+                    dd($errorMessage);
+                }
             }
             else{
                 if($event->acceptance=='auto'){

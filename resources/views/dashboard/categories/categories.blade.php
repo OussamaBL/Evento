@@ -8,7 +8,7 @@
                     <h6>Categories</h6>
                 </div>
                 <div class="p-6 pb-0 mb-0 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
-                    <a href="{{route('dashboard.categories.create')}}" >Add category</a>
+                    <a href="{{route('dashboard.categories.create')}}" class="px-6 py-2.5 rounded-full text-white text-sm tracking-wider font-semibold border-none outline-none bg-green-600 hover:bg-green-700 active:bg-green-600">Add category</a>
                 </div>
                 <div class="flex-auto px-0 pt-0 pb-2">
                     <div class="p-0 overflow-x-auto">
@@ -23,7 +23,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($categories as $category)
-                                        <tr>
+                                        <tr style="margin-bottom: 10px">
                                             <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                                 <p class="mb-0 text-xs font-semibold leading-tight">{{ $category->id }}</p>
                                             </td>
@@ -31,10 +31,11 @@
                                                 <p class="mb-0 text-xs font-semibold leading-tight">{{ $category->name }}</p>
                                             </td>
                                             <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                                <a href="{{route('dashboard.categories.edit',$category->id)}}" class="inline-block px-6 py-3 mr-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-cyan-500 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs"> 
+                                                <a href="{{route('dashboard.categories.edit',$category->id)}}" class="px-6 py-2.5 rounded-full text-white text-sm tracking-wider font-semibold border-none outline-none bg-blue-600 hover:bg-blue-700 active:bg-blue-600"> 
                                                     Edit 
                                                 </a>
-                                                <a href="{{route('dashboard.categories.delete', $category->id )}}" onclick="return confirm('Are you sure you want to delete this category?');" class="inline-block px-6 py-3 mr-3 font-bold text-center text-white uppercase align-middle transition-all bg-red-500 rounded-lg cursor-pointer leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs"> 
+                                                &nbsp &nbsp
+                                                <a href="{{route('dashboard.categories.delete', $category->id )}}" onclick="return confirm('Are you sure you want to delete this category?');" class="px-6 py-2.5 rounded-full text-white text-sm tracking-wider font-semibold border-none outline-none bg-red-600 hover:bg-red-700 active:bg-red-600"> 
                                                     Delete 
                                                 </a>
                                             </td>

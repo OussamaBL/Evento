@@ -29,7 +29,7 @@ class CategoryController extends Controller
         ]);
         $category=Category::where('name',$form['name'])->first();
         if(!$category) Category::create($form);
-        return redirect()->route('dashboard.categories.categories');
+        return redirect()->route('dashboard.categories');
     }
 
    
@@ -53,7 +53,7 @@ class CategoryController extends Controller
         ]);
         $category=Category::find($id);
         $category->update($form);
-        return redirect()->route('dashboard.categories.categories');
+        return redirect()->route('dashboard.categories');
     }
 
     /**
@@ -66,6 +66,6 @@ class CategoryController extends Controller
     {
         $category=Category::find($id);
         $category->delete();
-        return redirect()->route('dashboard.categories.categories');
+        return redirect()->route('dashboard.categories');
     }
 }
