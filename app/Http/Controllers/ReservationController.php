@@ -3,47 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Payment;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ReservationController extends Controller
 {
-    
-    public function generateTicketPDF(Reservation $reservation,$mediaUrls) {
-        // Load your HTML template for the ticket
-        $html = view('ticket', ['reservation' => $reservation,'image'=>$mediaUrls])->render();
-    
-        // Setup Dompdf options
-        $options = new Options();
-        $options->set('isHtml5ParserEnabled', true);
-        $options->set('isPhpEnabled', true);
-    
-        // Instantiate Dompdf with options
-        $dompdf = new Dompdf($options);
-    
-        // Load HTML content
-        $dompdf->loadHtml($html);
-    
-        // Set paper size and orientation
-        $dompdf->setPaper('A4', 'portrait');
 
-        // Render the HTML as PDF
-        $dompdf->render();
-        
-        // Save the generated PDF to the public folder
-        $pdfFileName = 'ticket_' . $reservation->id . '.pdf';
-        $pdfFilePath = public_path('tickets/' . $pdfFileName);
-        file_put_contents($pdfFilePath, $dompdf->output());
- 
-        // Optionally, you can store the file path in the database for future reference
-        $reservation->ticket = 'tickets/' . $pdfFileName;
-        $reservation->save();
-
-        // Output the generated PDF (you can also save it to a file, or return it as a response)
-        // $dompdf->stream('ticket.pdf');
-    }
    
     public function index(Event $event)
     {
@@ -62,7 +33,7 @@ class ReservationController extends Controller
         $reservation->event->place_dispo--;
         $reservation->save();
         $reservation->event->save();
-        $this->generateTicketPDF($reservation,$mediaUrls);
+        generateTicketPDF($reservation);
         return redirect()->route('event.approve',$reservation->event->id)->with("success", 'Reservation is accepted');
     }
     public function refuse(Reservation $reservation){
@@ -75,6 +46,69 @@ class ReservationController extends Controller
         return view('my_reservations',compact('reservations'));
     }
 
+
+    public function success(Request $request)
+    {
+
+        $reservation_identity = session()->get('reservation_identity');
+        $eventId = session()->get('eventId');
+
+        $user = Auth::user()->id;
+
+        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        $sessionId = $request->get('session_id');
+
+
+        try {
+            $session = \Stripe\Checkout\Session::retrieve($sessionId);
+
+
+            if (!$session) {
+                throw new NotFoundHttpException();
+            }
+
+            try {
+                $reservation = Reservation::where('reservation_identity', $reservation_identity)->firstOrFail();
+            } catch (\Throwable $th) {
+                $errorMessage = $th->getMessage();
+                dd($errorMessage);
+            }
+
+
+            DB::beginTransaction();
+
+            try {
+                $payment = Payment::create([
+                    'payment_id' => $session->id,
+                    'reservation_identity' => $reservation_identity,
+                    'amount' => $session->amount_total,
+                    'currency' => $session->currency,
+                    'payment_status' => $session->status,
+                    'payment_method' => $session->payment_method_types[0],
+                ]);
+
+                $reservation->status="accepted";
+                $reservation->save();
+                $reservation->event->place_dispo--;
+                $reservation->event->save();
+                // $this->generateTicketPDF($reservation);
+                generateTicketPDF($reservation);
+                DB::commit();
+                return redirect()->route('my_reservation')->with("success", 'Payment & Reservation Successfully');
+                
+            } catch (\Throwable $th) {
+                DB::rollback();
+                $errorMessage = $th->getMessage();
+                dd($errorMessage);
+            }
+
+        } catch (\Exception $e) {
+            throw new NotFoundHttpException();
+        }
+
+        // send ticket here 
+    }
+    
     public function create()
     {
         //

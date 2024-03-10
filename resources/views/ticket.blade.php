@@ -6,7 +6,7 @@
             <strong style="color: red">{{$reservation->event->title}}</strong>
             <p><strong>Date reservation : </strong>{{$reservation->date_reservation}}</p>
             <p><strong>Date event : </strong>{{$reservation->event->date_event}}</p>
-            <p><strong>Date reservation : </strong>{{$reservation->date_reservation}}</p>
+            <p><strong>Price : </strong>{{$reservation->event->price}}</p>
             <p><strong>Location : </strong>{{$reservation->event->place}}</p>
             <p><strong>Duration : </strong>{{$reservation->event->duration}}</p>
         </div>

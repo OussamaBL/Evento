@@ -13,6 +13,7 @@ class Reservation extends Model
         'event_id',
         'date_reservation',
         'ticket',
+        'reservation_identity',
         'status',
     ];
     public function event(){

@@ -222,6 +222,7 @@ class EventController extends Controller
         if($access_reservation){
             if($event->price!=0){
                 $user = $request->user()->id;
+                // column in reservation table ==> reservtion key 
                 $reservation_identity = time() . '_' . $user;
 
                 DB::beginTransaction();
@@ -252,10 +253,9 @@ class EventController extends Controller
                         'line_items' => $lineItems,
                         'mode' => 'payment',
                         'success_url' => route('sucess.payment', [], true) . "?session_id={CHECKOUT_SESSION_ID}",
-                        // 'cancel_url' => route('checkout.cancel', [], true),
                     ]);
 
-                     session()->put('eventId', $event->id);
+                    session()->put('eventId', $event->id);
 
                     session()->put('reservation_identity', $reservation_identity);
                     DB::commit();
@@ -279,6 +279,7 @@ class EventController extends Controller
                     $event->place_dispo--;
                     $event->save();
                     // $this->GenerateTicket();
+                    generateTicketPDF($reservation);
                     return redirect()->route('event.details')->with("success", 'Reservation Successfully');
                 }
                 else{

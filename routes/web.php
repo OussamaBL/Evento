@@ -6,6 +6,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\StripController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,13 +24,14 @@ Route::get('/', [HomeController::class,'index'])->name('index');
 Route::get('/event_page/{event}', [EventController::class,'details'])->name('event.details');
 Route::get('/event/filter/{id}', [EventController::class, 'filterByCategory'])->name('event.filterByCategory');
 Route::get('/event/search/{title}', [EventController::class, 'searchByTitle'])->name('event.searchByTitle');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/reserver/{event}', [EventController::class, 'reservation'])->name('reserver');
     Route::get('/event/my_reservation', [ReservationController::class, 'my_reservation'])->name('my_reservation');
-
+    Route::get('/payment/success', [ReservationController::class, 'success'])->name('sucess.payment');
 });
 
 Route::middleware('CheckisOrganizer')->group(function () {
