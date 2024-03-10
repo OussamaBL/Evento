@@ -206,8 +206,12 @@ class EventController extends Controller
     }
     public function details(Request $request,Event $event){
         $access_reservation=true;
-        $res=Reservation::where('user_id',$request->user()->id)->where('event_id',$event->id)->first();
-        if($event->place_dispo<=0 || strtotime($event->date_event) < strtotime('today') || $res || $event->user_id==$request->user()->id || $request->user()->hasRole('admin')) $access_reservation=false;
+        if(!Auth::check()) $access_reservation=false;
+        else{
+            $res=Reservation::where('user_id',$request->user()->id)->where('event_id',$event->id)->first();
+            if($event->place_dispo<=0 || strtotime($event->date_event) < strtotime('today') || $res || $event->user_id==$request->user()->id || $request->user()->hasRole('admin')) $access_reservation=false;
+        }
+        
         return view('event_page',compact('event','access_reservation'));
     }
 
@@ -291,7 +295,15 @@ class EventController extends Controller
             return redirect()->back()->withInput()->withErrors($request->errors());
         }
     }
-    public function GenerateTicket(){
-
+    public function statistique(Request $request){
+        $event_pending=Event::where('user_id',$request->user()->id)->where('status','pending')->count();
+        $event_accept=Event::where('user_id',$request->user()->id)->where('status','accepted')->count();
+        $reservation_pending=Reservation::where('status','pending')->whereHas('event',function($query){
+            $query->where('user_id',Auth::id());
+        })->count();
+        $reservation_accept=Reservation::where('status','accepted')->whereHas('event',function($query){
+            $query->where('user_id',Auth::id());
+        })->count();
+        return view('organizer.statistique',compact('event_pending','event_accept','reservation_pending','reservation_accept'));
     }
 }

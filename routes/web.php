@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('CheckisOrganizer')->group(function () {
     Route::get('/my_events', [EventController::class, 'index'])->name('event.index');
+    Route::get('/statistique', [EventController::class, 'statistique'])->name('organizer.statistique');
     Route::get('/events_approve/{event}', [ReservationController::class, 'reservations_pending'])->name('event.approve');
     Route::get('/event_reservation/{event}', [ReservationController::class, 'index'])->name('event.reservations');
     Route::get('/reservation/accept/{reservation}', [ReservationController::class, 'accept'])->name('reservation.accept');
