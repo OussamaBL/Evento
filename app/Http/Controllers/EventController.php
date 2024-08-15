@@ -288,7 +288,7 @@ class EventController extends Controller
                         'event_id'=>$event->id,
                         'status'=>'pending', 
                     ]);
-                    return redirect()->route('event.details')->with("success", 'Reservation in pending Successfully');
+                    return redirect()->route('event.details',$event->id)->with("success", 'Reservation in pending Successfully');
                 }
             } 
         }
